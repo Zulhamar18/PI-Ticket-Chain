@@ -15,8 +15,7 @@
   },
   "devDependencies": {
     "jest": "^29.7.0",
-    "nodemon": "^3.1.9"
-  },
+    "nodemon": "^3.1.9"},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Zulhamar18/PI-Ticket-Chain.git"
