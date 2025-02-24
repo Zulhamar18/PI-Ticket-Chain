@@ -1,21 +1,46 @@
 {
   "name": "pi-ticket-chain-backend",
   "version": "1.0.0",
-  "description": "Backend for Ticket-Chain Platform",
+  "description": "Backend API for Ticket-Chain Platform – A blockchain-based ticketing system for seamless cryptocurrency payments.",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
+    "start": "node server.js", 
+    "dev": "nodemon server.js",
+    "lint": "eslint . --fix",
+    "test": "jest" 
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Zulha/pi-ticket-chain-backend.git"
+  },
+  "keywords": [
+    "backend",
+    "ticketing",
+    "blockchain",
+    "nodejs",
+    "express",
+    "api",
+    "pi-network"
+  ],
+  "author": "Zulham Ardiansyah <zulhamardiansyah@yahoo.com>",
+  "license": "MIT",
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "mongoose": "^7.4.0",
+    "jsonwebtoken": "^9.0.0",
+    "bcryptjs": "^2.4.3",
+    "helmet": "^7.0.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.9"
+    "nodemon": "^3.1.9",
+    "eslint": "^8.47.0",
+    "jest": "^29.6.0",
+    "supertest": "^6.3.3"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=7.0.0"
+  }
 }
