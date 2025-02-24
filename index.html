@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket-Chain</title>
+    <!-- Referensi ke file CSS eksternal -->
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- Tambahkan Axios dari CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="hero">
+        <img src="assets/logo.png" alt="Ticket-Chain Logo" class="logo">
+        <h1>Welcome to Ticket-Chain</h1>
+        <p>A Blockchain-Based Ticketing Platform</p>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Section 1: Introduction -->
+        <section class="section intro">
+            <h2>What is Ticket-Chain?</h2>
+            <p>Ticket-Chain is a blockchain-based ticketing platform that allows you to buy, sell, and manage tickets securely and transparently.</p>
+        </section>
+
+        <!-- Section 2: Features -->
+        <section class="section features">
+            <h2>Why Choose Ticket-Chain?</h2>
+            <ul class="feature-list">
+                <li><strong>Secure Transactions:</strong> All transactions are secured using blockchain technology.</li>
+                <li><strong>Transparent System:</strong> Every ticket purchase is recorded on the blockchain for full transparency.</li>
+                <li><strong>Easy Management:</strong> Manage your tickets effortlessly with our user-friendly interface.</li>
+                <li><strong>No Ads:</strong> Enjoy a seamless experience without intrusive ads.</li>
+            </ul>
+        </section>
+
+        <!-- Section 3: Call to Action -->
+        <section class="section cta">
+            <h2>Get Started Today!</h2>
+            <!-- Tombol Login with Pi -->
+            <button id="loginButton">Login with Pi</button>
+            <!-- Tombol Explore Now -->
+            <button id="startButton">Explore Now</button>
+            <!-- Tombol Buy Ticket -->
+            <button id="buyTicketButton">Buy Ticket</button>
+            <!-- Tombol Watch Rewarded Ad -->
+            <button id="watchAdButton">Watch Rewarded Ad</button>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2023 Ticket-Chain. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Inisialisasi Pi SDK dalam mode sandbox
+        window.Pi.init({
+            sandbox: true, // Aktifkan mode sandbox
+            version: "2.0"
+        });
+
+        // Fungsi untuk menangani otentikasi pengguna
+        async function authenticateUser() {
+            try {
+                const scopes = ['username', 'email']; // Scope yang diminta
+                const onIncompletePaymentFound = (payment) => {
+                    console.log('Incomplete payment found:', payment);
+                };
+
+                const authRes = await window.Pi.authenticate(scopes, onIncompletePaymentFound);
+                const accessToken = authRes.accessToken;
+
+                // Verifikasi token dengan API /me
+                const meResponse = await axios.get('https://api.minepi.com/v2/me', {
+                    headers: { 'Authorization': `Bearer ${accessToken}` }
+                });
+
+                const userData = meResponse.data;
+                console.log('User authenticated:', userData);
+
+                // Simpan data pengguna di localStorage
+                localStorage.setItem('user', JSON.stringify(userData));
+
+                alert(`Welcome, ${userData.username}! You are now logged in.`);
+                window.location.href = 'dashboard.html'; // Redirect ke dashboard
+
+            } catch (error) {
+                console.error('Authentication failed:', error);
+                alert('Login failed. Please try again.');
+            }
+        }
+
+        // Event listener untuk tombol "Login with Pi"
+        document.getElementById('loginButton').addEventListener('click', authenticateUser);
+
+        // Event listener untuk tombol "Explore Now"
+        document.getElementById('startButton').addEventListener('click', () => {
+            const user = localStorage.getItem('user');
+            if (user) {
+                window.location.href = 'dashboard.html';
+            } else {
+                alert('Welcome to Ticket-Chain! Please log in to explore all features.');
+            }
+        });
+
+        // Event listener untuk tombol "Buy Ticket"
+        document.getElementById('buyTicketButton').addEventListener('click', async () => {
+            const user = localStorage.getItem('user');
+            if (!user) {
+                alert('Please log in to buy a ticket.');
+                return;
+            }
+
+            try {
+                const paymentData = {
+                    amount: 1, // Jumlah Pi
+                    memo: "Ticket Purchase",
+                    metadata: { ticketType: "General Admission" },
+                    uid: JSON.parse(user).uid // UID pengguna
+                };
+
+                // Kirim permintaan pembayaran ke backend Anda
+                const response = await axios.post('http://localhost:3000/payments', paymentData);
+
+                console.log('Payment created:', response.data);
+                alert('Payment initiated successfully! Please complete the transaction.');
+
+            } catch (error) {
+                console.error('Payment failed:', error);
+                alert('Failed to initiate payment. Please try again.');
+            }
+        });
+
+        // Event listener untuk tombol "Watch Rewarded Ad"
+        document.getElementById('watchAdButton').addEventListener('click', async () => {
+            const user = localStorage.getItem('user');
+            if (!user) {
+                alert('Please log in to watch a rewarded ad.');
+                return;
+            }
+
+            try {
+                const showAdResponse = await window.Pi.Ads.showAd("rewarded");
+                if (showAdResponse.result === "AD_REWARDED") {
+                    const adId = showAdResponse.adId;
+
+                    // Verifikasi status iklan menggunakan backend Anda
+                    const adStatusResponse = await axios.get(`http://localhost:3000/ads/status/${adId}`);
+
+                    const adStatus = adStatusResponse.data;
+                    if (adStatus.mediator_ack_status === "granted") {
+                        alert('You have been rewarded for watching the ad!');
+                    } else {
+                        alert('Reward verification failed. Please try again.');
+                    }
+                } else {
+                    alert('Ad was not rewarded. Please try again.');
+                }
+
+            } catch (error) {
+                console.error('Rewarded ad failed:', error);
+                alert('Failed to show rewarded ad. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>
