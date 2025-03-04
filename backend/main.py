@@ -1,8 +1,11 @@
 import logging
 import httpx
-from fastapi import FastAPI, Request, HTTPException
+import os
+from fastapi import FastAPI, Request, HTTPException, Depends
 from fastapi.responses import JSONResponse
-from config import PI_API_KEY, PI_API_URL  # Pastikan config.py tersedia
+
+# Import dari config.py
+from config import PI_API_KEY, PI_API_URL  
 
 # Konfigurasi Logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -12,11 +15,32 @@ if not PI_API_KEY:
     logging.error("❌ PI_API_KEY tidak ditemukan! Periksa file .env")
     raise ValueError("PI_API_KEY tidak ditemukan!")
 
+# Inisialisasi FastAPI
 app = FastAPI()
+
+# Middleware untuk Logging Semua Request
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    logging.info(f"📡 Incoming request: {request.method} {request.url}")
+    response = await call_next(request)
+    return response
 
 @app.get("/")
 async def read_root():
     return JSONResponse(content={"message": "✅ Welcome to Ticket Chain API!"})
+
+# Endpoint untuk Memeriksa Validation Key
+@app.get("/validate-key")
+async def validate_key():
+    key_path = "validation-key.txt"
+    
+    if os.path.exists(key_path):
+        with open(key_path, "r") as file:
+            key_content = file.read().strip()
+            return JSONResponse(content={"message": "✅ Validation Key ditemukan!", "key": key_content})
+    else:
+        logging.warning("❌ Validation Key tidak ditemukan!")
+        raise HTTPException(status_code=404, detail="Validation Key tidak ditemukan!")
 
 # Authentication with Pi Network
 @app.post("/auth")
