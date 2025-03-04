@@ -2,10 +2,8 @@ import logging
 import httpx
 import os
 from fastapi import FastAPI, Request, HTTPException, Depends
-from fastapi.responses import JSONResponse
-
-# Import dari config.py
-from config import PI_API_KEY, PI_API_URL  
+from fastapi.responses import JSONResponse, FileResponse
+from config import PI_API_KEY, PI_API_URL  # Pastikan config.py tersedia
 
 # Konfigurasi Logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -30,14 +28,12 @@ async def read_root():
     return JSONResponse(content={"message": "✅ Welcome to Ticket Chain API!"})
 
 # Endpoint untuk Memeriksa Validation Key
-@app.get("/validate-key")
-async def validate_key():
+@app.get("/validation-key.txt")
+async def get_validation_key():
     key_path = "validation-key.txt"
     
     if os.path.exists(key_path):
-        with open(key_path, "r") as file:
-            key_content = file.read().strip()
-            return JSONResponse(content={"message": "✅ Validation Key ditemukan!", "key": key_content})
+        return FileResponse(key_path, media_type="text/plain")
     else:
         logging.warning("❌ Validation Key tidak ditemukan!")
         raise HTTPException(status_code=404, detail="Validation Key tidak ditemukan!")
