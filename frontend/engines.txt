@@ -1,0 +1,5 @@
+npm WARN EBADENGINE Unsupported engine {
+  package: 'pi-ticket-chain@1.0.0',
+  required: { node: '>=16.0.0', npm: '>=7.0.0' },
+  current: { node: 'v14.0.0', npm: 'v6.0.0' }
+}
