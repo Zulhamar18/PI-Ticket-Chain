@@ -26,6 +26,7 @@ header .logo {
 
 nav ul.nav-links {
     list-style: none;
+    padding: 0;
     display: flex;
     justify-content: center;
     gap: 20px;
@@ -35,6 +36,12 @@ nav ul.nav-links li a {
     text-decoration: none;
     color: #007bff;
     font-weight: bold;
+    transition: color 0.3s;
+}
+
+nav ul.nav-links li a:hover {
+    color: #0056b3;
+    text-decoration: underline;
 }
 
 main .section {
@@ -50,6 +57,7 @@ footer {
 
 footer .footer-links {
     list-style: none;
+    padding: 0;
     display: flex;
     justify-content: center;
     gap: 15px;
@@ -58,4 +66,10 @@ footer .footer-links {
 footer .footer-links li a {
     text-decoration: none;
     color: #007bff;
+    transition: color 0.3s;
+}
+
+footer .footer-links li a:hover {
+    color: #0056b3;
+    text-decoration: underline;
 }

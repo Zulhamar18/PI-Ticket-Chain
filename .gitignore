@@ -1,26 +1,25 @@
-# Dependencies
-node_modules/
-venv/
+# Ignore invalid files
+{
+file.txt
+test.txt
+main.cpp
 
-# Python cache
-__pycache__/
-*.pyc
-
-# Environment variables
+# Ignore sensitive files
 .env
 
-# Build output
+# Ignore temporary files
+*.tmp
+*.log
+
+# Ignore build output
 dist/
 build/
 
-# Logs and temporary files
-*.log
-*.tmp
+# Ignore dependencies
+node_modules/
+venv/
 
-# IDE or editor-specific files
+# Ignore IDE or editor-specific files
 .vscode/
 .idea/
 *.sublime-project
-
-# Ignore invalid files
-{
