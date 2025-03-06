@@ -1,50 +1,45 @@
-{
-  "name": "pi-ticket-chain",
-  "version": "1.0.0",
-  "description": "Backend for Ticket-Chain Platform integrated with Pi Network",
-  "main": "server.js",
-  "type": "commonjs",
-  "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js",
-    "test": "jest",
-    "build": "echo 'No build step required'",
-    "vercel": "vercel deploy --prod",
-    "format": "prettier --write .",
-    "lint": "eslint ."
-  },
-  "dependencies": {
-    "body-parser": "^1.20.2",
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.7",
-    "express": "^4.21.2",
-    "morgan": "^1.10.0",
-    "pi-backend": "^0.1.3"
-  },
-  "devDependencies": {
-    "eslint": "^9.0.0",
-    "jest": "^29.7.0",
-    "nodemon": "^3.1.9",
-    "prettier": "^3.5.2"
-  },
-  "engines": {
-    "node": ">=16"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Zulhamar18/PI-Ticket-Chain.git"
-  },
-  "keywords": [
-    "pi-network",
-    "blockchain",
-    "ticketing",
-    "crypto-payments",
-    "decentralized"
-  ],
-  "author": "Zulham Ardiansyah",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Zulhamar18/PI-Ticket-Chain/issues"
-  },
-  "homepage": "https://github.com/Zulhamar18/PI-Ticket-Chain#readme"
-}
+// Import dependencies
+const express = require('express');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const dotenv = require('dotenv');
+const morgan = require('morgan');
+const { PiBackend } = require('pi-backend');
+
+// Load environment variables from .env file
+dotenv.config();
+
+// Initialize app
+const app = express();
+
+// Middleware
+app.use(cors());
+app.use(bodyParser.json());
+app.use(morgan('dev'));
+
+// Example of Pi Network Integration
+const pi = new PiBackend({
+  appId: process.env.PI_APP_ID, // Ensure you have this in your .env file
+  appSecret: process.env.PI_APP_SECRET // Ensure you have this in your .env file
+});
+
+// Test route
+app.get('/', (req, res) => {
+  res.send('Welcome to the PI-Ticket-Chain backend!');
+});
+
+// Example route to interact with Pi Network (can be customized based on your use case)
+app.get('/pi-network-data', async (req, res) => {
+  try {
+    const data = await pi.getData(); // Example function, adjust as needed
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch Pi Network data' });
+  }
+});
+
+// Start server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
