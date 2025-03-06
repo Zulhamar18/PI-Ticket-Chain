@@ -1,11 +1,50 @@
-const express = require('express');
-const app = express();
-const port = process.env.PORT || 3000;
-
-app.get('/', (req, res) => {
-  res.send('Hello, World!');
-});
-
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+{
+  "name": "Pi-Ticket-Chain",
+  "version": "1.0.0",
+  "description": "Backend for Ticket-Chain Platform integrated with Pi Network",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "test": "jest",
+    "build": "echo 'No build step required'",
+    "vercel": "vercel deploy --prod",
+    "format": "prettier --write .",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "morgan": "^1.10.0",
+    "pi-backend": "^0.1.3"
+  },
+  "devDependencies": {
+    "eslint": "^9.0.0",
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.9",
+    "prettier": "^3.5.2"
+  },
+  "engines": {
+    "node": ">=16"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Zulhamar18/PI-Ticket-Chain.git"
+  },
+  "keywords": [
+    "pi-network",
+    "blockchain",
+    "ticketing",
+    "crypto-payments",
+    "decentralized"
+  ],
+  "author": "Zulham Ardiansyah",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Zulhamar18/PI-Ticket-Chain/issues"
+  },
+  "homepage": "https://github.com/Zulhamar18/PI-Ticket-Chain#readme"
+}
