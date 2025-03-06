@@ -8,12 +8,12 @@
   ],
   "routes": [
     {
-      "src": "/(.*)",
-      "dest": "/"
+      "src": "/validation-key.txt",
+      "dest": "/public/validation-key.txt"
     },
     {
-      "src": "/validation-key.txt",
-      "dest": "/public/validation-key.txt"  // ✅ Arahkan ke file
+      "src": "/(.*)",
+      "dest": "/"
     }
   ]
 }
